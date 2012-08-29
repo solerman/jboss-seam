@@ -301,7 +301,7 @@ public class Component extends Model
       boolean hasAnnotation = getBeanClass().isAnnotationPresent(Synchronized.class); 
       
       // Technically, we don't need to synchronize page-scoped components if StateManager#isSavingStateInClient(FacesContext) is true 
-      synchronize = ( scope==SESSION || scope==PAGE || hasAnnotation );
+      synchronize = ( scope==SESSION || scope==PAGE || hasAnnotation ) && type != ComponentType.STATEFUL_SESSION_BEAN;
             
       if (synchronize)
       {
@@ -313,6 +313,11 @@ public class Component extends Model
       if (hasAnnotation && !interceptionEnabled)
       {
          log.warn("Interceptors are disabled for @Synchronized component - synchronization will be disabled for: " + name);
+      }
+      
+      if (hasAnnotation && type == ComponentType.STATEFUL_SESSION_BEAN)
+      {
+         log.warn("Seam synchronization interceptor is disabled for @Synchronized @Stateful component - Seam synchronization will be disabled for: " + name);
       }
    }
    
@@ -1825,13 +1830,19 @@ public class Component extends Model
                   return true;
                }
             }
+            
+            // No interface view
+            if (clazz.isInstance(bean)) {
+               return true;
+            }
+            
             return false;
       }
    }
 
    public static Set<Class> getBusinessInterfaces(Class clazz)
    {
-      Set<Class> result = new HashSet<Class>();
+      Set<Class> result = new LinkedHashSet<Class>();
 
       if ( clazz.isAnnotationPresent(LOCAL) )
       {
@@ -2076,7 +2087,6 @@ public class Component extends Model
          else if (factoryMethod != null && getOutScope(factoryMethod.getScope(), factoryMethod.getComponent()).isContextActive())
          {
             Object factory = Component.getInstance(factoryMethod.getComponent().getName(), true);
-            Component component = factoryMethod.getComponent();
             ScopeType scopeResult = getOutScope(factoryMethod.getScope(), factoryMethod.getComponent());
             ScopeType scopeFactory = factoryMethod.getComponent().getScope();
             // we need this lock in the following cases: (1) the target scope is
@@ -2096,26 +2106,13 @@ public class Component extends Model
 
             if (lockingNeeded)
             {
-               // synchronize all instances of this component as they might
-               // outject to the same scope (i.e. component factory in EVENT scope,
-               // outjecting to APPLICATION scope).
-               if (scopeResult == ScopeType.CONVERSATION || scopeResult == ScopeType.EVENT || scopeResult == ScopeType.PAGE)
-               {
-                  synchronized (factory)
-                  {
-                     return createInstanceFromFactory(name, scope, factoryMethod, factory);
-                  }
-               }
-               // synchronize all instances of this factory as they might
-               // outject to the same scope (i.e. factory in EVENT scope,
-               // outjecting to APPLICATION scope).
-               else
-               {
-                  synchronized (component)
-                  {
-                     return createInstanceFromFactory(name, scope, factoryMethod, factory);
-                  }
-               }
+              // Only one factory instance can access result scope
+              // CONVERSATION / EVENT / PAGE anyway due to
+              // the locking of the conversation.
+              synchronized (factoryMethod)
+              {
+                 return createInstanceFromFactory(name, scope, factoryMethod, factory);
+              }
             }
             else
             {
@@ -2362,8 +2359,9 @@ public class Component extends Model
          {
             log.debug("trying to inject with hierarchical context search: " + name);
          }
-         boolean create = in.create() && !org.jboss.seam.contexts.Lifecycle.isDestroying();
-         result = getInstanceInAllNamespaces(name, create);
+         boolean allowAutocreation = !org.jboss.seam.contexts.Lifecycle.isDestroying();
+         boolean create = in.create() && allowAutocreation;
+         result = getInstanceInAllNamespaces(name, create, allowAutocreation);
       }
       else
       {
@@ -2408,15 +2406,15 @@ public class Component extends Model
       }
    }
 
-   private Object getInstanceInAllNamespaces(String name, boolean create)
+   private Object getInstanceInAllNamespaces(String name, boolean create, boolean allowAutocreation)
    {
       Object result;
-      result = getInstance(name, create);
+      result = getInstance(name, create, allowAutocreation);
       if (result==null)
       {
          for ( Namespace namespace: getImports() )
          {
-            result = namespace.getComponentInstance(name, create);
+            result = namespace.getComponentInstance(name, create, allowAutocreation);
             if (result!=null) break; 
          }
       }
@@ -2424,7 +2422,7 @@ public class Component extends Model
       {
          for ( Namespace namespace: Init.instance().getGlobalImports() )
          {
-            result = namespace.getComponentInstance(name, create);
+            result = namespace.getComponentInstance(name, create, allowAutocreation);
             if (result!=null) break; 
          }
       }
@@ -2433,7 +2431,7 @@ public class Component extends Model
          Namespace namespace = getNamespace();
          if (namespace!=null)
          {
-            result = namespace.getComponentInstance(name, create);
+            result = namespace.getComponentInstance(name, create, allowAutocreation);
          }
       }
       return result;
@@ -2475,9 +2473,19 @@ public class Component extends Model
       Set<Class> interfaces = new LinkedHashSet<Class>();
       interfaces.add(Instance.class);
       interfaces.add(Proxy.class);
+      
+      boolean noInterfaceView = false;
+      
       if ( type.isSessionBean() )
       {
-          interfaces.addAll(businessInterfaces);
+          if (businessInterfaces.isEmpty())
+          {
+             noInterfaceView = true;
+          }
+          else
+          {
+             interfaces.addAll(businessInterfaces);
+          }
       }
       else
       {
@@ -2485,7 +2493,7 @@ public class Component extends Model
          interfaces.add(Mutable.class);
       }
       ProxyFactory factory = new ProxyFactory();
-      factory.setSuperclass( type==JAVA_BEAN ? beanClass : Object.class );
+      factory.setSuperclass( (type==JAVA_BEAN || noInterfaceView) ? beanClass : Object.class );
       factory.setInterfaces( interfaces.toArray( new Class[0] ) );
       factory.setFilter(FINALIZE_FILTER);
       return factory.createClass();
