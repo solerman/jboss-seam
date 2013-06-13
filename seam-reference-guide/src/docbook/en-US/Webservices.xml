@@ -306,7 +306,7 @@ public class MyCustomerResource {
    xmlns:resteasy="http://jboss.org/schema/seam/resteasy"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation=
-     http://jboss.org/schema/seam/resteasy
+     "http://jboss.org/schema/seam/resteasy
          http://jboss.org/schema/seam/resteasy-2.3.xsd
      http://jboss.org/schema/seam/components
          http://jboss.org/schema/seam/components-2.3.xsd">]]></programlisting>
