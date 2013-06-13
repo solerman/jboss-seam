@@ -13,24 +13,17 @@
 
 	<build>
 		<defaultGoal>process-classes</defaultGoal>
+        <!-- this filters docbook xml files to replace project.version with real Seam version -->
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/docbook</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<configuration>
-							<target>
-								<echo file="${project.basedir}/src/docbook/en-US/Version_Info.xml">&lt;releaseinfo&gt;${project.version}&lt;/releaseinfo&gt;</echo>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -118,7 +111,7 @@
 					
 				</dependencies>
 				<configuration>
-					<sourceDirectory>${project.basedir}/src/docbook</sourceDirectory>
+					<sourceDirectory>${project.build.outputDirectory}</sourceDirectory>
 					<sourceDocumentName>master.xml</sourceDocumentName>
 					<masterTranslation>en-US</masterTranslation>
 

@@ -4,7 +4,7 @@
 <bookinfo>
    <title>Seam - Contextual Components</title>
    <subtitle>A Framework for Enterprise Java</subtitle>
-   <xi:include href="Version_Info.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+   <releaseinfo>${project.version}</releaseinfo>
 
    <xi:include href="Author_Group.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </bookinfo>
