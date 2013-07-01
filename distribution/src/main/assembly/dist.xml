@@ -39,7 +39,6 @@
             <include>seam21migration.txt</include>
             <include>seam23migration.txt</include>
             <include>seam2migration.txt</include>
-            <include>clustering-howto.txt</include>
             <include>seam</include>
             <include>seam.bat</include>
          </includes>         
