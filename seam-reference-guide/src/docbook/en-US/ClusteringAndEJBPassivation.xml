@@ -92,7 +92,7 @@
             <title>Deploying a Seam application to a JBoss AS cluster with session replication</title>
 
             <warning>
-                <para>This section needs to be updated for JBoss AS 7.x</para>
+                <para>The clustering HowTo on AS7 is described detailed in <ulink url=="https://docs.jboss.org/author/display/AS71/AS7+Cluster+Howto"</ulink> </para>
             </warning>
             
             <para>
@@ -146,7 +146,7 @@
                 </listitem>
                 <listitem>
                     <para>Start the master JBoss AS instance on the first IP</para>
-                    <programlisting>./bin/run.sh -c all -b 192.168.1.2</programlisting>
+                    <programlisting>./bin/domain.sh -b 192.168.1.2</programlisting>
                     <para>The log should report that there are 1 cluster members and 0 other members.</para>
                 </listitem>
                 <listitem>
@@ -154,7 +154,7 @@
                 </listitem>
                 <listitem>
                     <para>Start the slave JBoss AS instance on the second IP</para>
-                    <programlisting>./bin/run.sh -c all -b 192.168.1.3</programlisting>
+                    <programlisting>./bin/domain.sh -c all -b 192.168.1.3</programlisting>
                     <para>The log should report that there are 2 cluster members and 1 other members. It should also
                     show the state being retrieved from the master.</para>
                 </listitem>
