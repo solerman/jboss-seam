@@ -25,7 +25,7 @@ Updating version numbers
     - cd examples; mvn versions:set -DnewVersion=XXX
     - find examples/remoting/progressbar -type f -name pom.xml -exec sed -i 's/XXX/YYY/g' {} \;
  - replace all other version string usages
-    - find . -path '*/.svn*' -prune -o -type f -name '*.xml' -exec sed -i /XXX/YYY/g' {} \;
+    - find . -prune -o -type f -name '*.xml' -exec sed -i /XXX/YYY/g' {} \;
 
     
 Maven repository settings

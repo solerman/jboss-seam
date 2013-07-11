@@ -1,6 +1,16 @@
 JBoss Seam Changelog
 ====================
 
+Release Notes - Seam 2 - Version 2.3.1.Final
+
+** Bug
+    * [JBSEAM-5101] - Seam Reference Documentation - invalid code samples
+
+** Task
+    * [JBSEAM-5004] - Update Clustering chapter for AS7
+    * [JBSEAM-5110] - Seam documentation: replace all references to current Seam version with version property
+
+
 Release Notes - Seam 2 - Version 2.3.1.CR1
 
 ** Bug

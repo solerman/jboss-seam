@@ -1,4 +1,4 @@
-Seam is Copyright 2005-2012, JBoss, Home of Professional Open Source.
+Seam is Copyright 2005-2013, JBoss, Home of Professional Open Source.
 Red Hat, Inc., and individual contributorsi as indicated above.
 It is licensed under the GNU LGPL except where otherwise
 noted in the source file's header.
