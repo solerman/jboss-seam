@@ -42,7 +42,8 @@
         <version.infinispan>5.2.4.Final</version.infinispan>
         <version.junit>4.10</version.junit>
         <version.testng>5.14.10</version.testng>
-        <version.org.jboss.bom>1.0.5.Final</version.org.jboss.bom>        
+        <version.org.jboss.bom>1.0.7.CR8</version.org.jboss.bom>
+        <version.richfaces>4.3.3.Final</version.richfaces>        
 
 		<!-- ***************** -->
 		<!-- Repository Deployment URLs -->
@@ -75,9 +76,9 @@
 			</dependency>
 
 			<dependency>
-			  <groupId>org.jboss.bom</groupId>
-			  <artifactId>jboss-javaee-6.0-with-richfaces</artifactId>
-			  <version>${version.org.jboss.bom}</version>
+			  <groupId>org.richfaces</groupId>
+			  <artifactId>richfaces-bom</artifactId>
+			  <version>${version.richfaces}</version>
 			  <type>pom</type>
 			  <scope>import</scope>
 			</dependency>

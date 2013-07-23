@@ -15,7 +15,7 @@
             <plugin>
                 <groupId>org.richfaces.cdk</groupId>
                 <artifactId>maven-cdk-plugin</artifactId>
-                <version>${version.richfaces}</version>
+                <version>${version.richfaces.cdk}</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>org.richfaces.cdk</groupId>
             <artifactId>annotations</artifactId>
-            <version>${version.richfaces}</version>
+            <version>${version.richfaces.cdk}</version>
             <optional>true</optional>
         </dependency>
 

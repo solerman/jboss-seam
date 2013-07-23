@@ -55,7 +55,7 @@
 		<version.emma>2.0.5312</version.emma>
 		<version.jsf2>2.1.7</version.jsf2>
 		<version.junit>4.8.2</version.junit>
-		<version.richfaces>4.2.2.Final</version.richfaces>
+		<version.richfaces.cdk>4.2.2.Final</version.richfaces.cdk>
 
 		<!-- ***************** -->
 		<!-- Repository Deployment URLs -->
