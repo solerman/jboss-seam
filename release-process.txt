@@ -22,10 +22,18 @@ Updating version numbers
         - Check all the issue types one at a time to determine final list.
  - update pom.xml versions
     - mvn versions:set -DnewVersion=XXX -Pall
-    - cd examples; mvn versions:set -DnewVersion=XXX
-    - find examples/remoting/progressbar -type f -name pom.xml -exec sed -i 's/XXX/YYY/g' {} \;
- - replace all other version string usages
-    - find . -prune -o -type f -name '*.xml' -exec sed -i /XXX/YYY/g' {} \;
+ - or use maven-release-plugin
+
+export MAVEN_OPTS="-Xms256m -Xmx1024m -XX:MaxPermSize=512m";
+mvn release:prepare -DreleaseVersion=<2.3.1.Final> -Dtag=<JBoss_Seam_2_3_1_Final> -DpushChanges=false
+-DdevelopmentVersion=<2.3.2-SNAPSHOT> -Dusername=<your_github_account> -DcheckModificationExcludeList=seam-cdk-helper/**
+-Pall,release
+
+ - check your sources and changes of version string usages
+   - git diff
+
+ - Alternatively change missing by
+   - find . -prune -o -type f -exec grep -i /XXX/YYY/g' {} \;
 
     
 Maven repository settings
@@ -49,6 +57,8 @@ Staging Maven artifacts
 ------------------------
 * Maven release procedure.
     - Run mvn deploy -DrepositoryId=jboss-releases-repository -Durl=https://repository.jboss.org/nexus/service/local/staging/deploy/maven2 -s settings-staging.xml    
+      or
+    - Run mvn release:perform -s settings-staging.xml
     - Then follow http://community.jboss.org/wiki/MavenDeployingaRelease section Closing the Staging Respository
     - test a Seam project with staged artifacts in repository https://repository.jboss.org/nexus/content/groups/staging/
     - then release Maven artifacts 
@@ -67,28 +77,8 @@ Internal testing before tagging for Final releases
 --------------------------------------------------
 Final releases should be verified before tagging. Just note revision number after updating changelog.txt.
 Send email to <seam-dev@lists.jboss.org> about frozen branch and point the QE to the revision number.
-After verification continue with creating final tag and final steps for releasing.
-
-
-SVN tagging and checkout
-------------------------
-<NOTE testing can begin prior to official tagging but a complete process 
-        should be executed on the tag prior to release/> 
-* Tag the release (XX as needed)
-    -"svn copy https://svn.jboss.org/repos/seam/XX/XX 
-               https://svn.jboss.org/repos/seam/tags/JBoss_Seam_x_x_x_XXX 
-               -m "create JBoss_Seam_x_x_x_XXX tag""
-        - ex. "svn copy https://svn.jboss.org/repos/seam/branches/community/Seam_2_3
-          https://svn.jboss.org/repos/seam/tags/JBoss_Seam_2_3_0_Final -m "created JBoss_Seam_2_3_0_Final tag" "
-
-* In a clean directory checkout the newly tagged seam source ( XX as needed)
-    - "svn co https://svn.jboss.org/repos/seam/tags/JBoss_Seam_x_x_x_XXX seam"  
-        - ex. "svn co https://svn.jboss.org/repos/seam/tags/JBoss_Seam_2_1_0_B1 seam"
-* In the original branch/trunk change:
-    - Qualifier back to "-SNAPSHOT" in default.build.properties file.
-        - The version numbers should be incremented as appropriate.
-        - Any new work is that versions snapshot
-    - Revert any Maven repository changes if needed
+After verification continue with creating final tag and final steps for releasing (if you use mvn
+release:prepare/perform, do the verification before perform goal) .
 
 JDK Version Specific Information
 --------------------------------
@@ -117,7 +107,6 @@ Building and Checking Dist
     
 * check that the following files/directories exist in the distribution/target/*.zip or *.tar.gz "ls -1"    
     build
-    clustering-howto.txt
     copyright.txt
     doc
     extras
@@ -243,6 +232,7 @@ Example verification
   - remoting/chatroom
   - remoting/gwt
   - remoting/helloworld
+  - remoting/progressbar
   - seambay
   - seamdiscs
   - seampay
@@ -474,7 +464,7 @@ Final Build + Upload
 --------------
 * When ready for the release
     - checkout a clean version of the tag in a new/clean directory.
-    - run "mvn clean install -Pall,distribution -Dbuild.translations=true > ../releaselogs/x.x.x.XX.finaldistbuild.txt"
+    - run "mvn clean install -Pdistribution -Dbuild.translations=true > ../releaselogs/x.x.x.XX.finaldistbuild.txt"
     - diff this to the one used for testing
 
 * Follow instructions for sourceforge upload
@@ -541,17 +531,9 @@ Notes
 -----
 * To reapply a tag:
  - First delete the original
-    - svn delete https://svn.jboss.org/repos/seam/tags/JBoss_Seam_x_x_x_XXX 
-      -m "removing old tag prior to applying updated tag"
-    - ex. svn delete https://svn.jboss.org/repos/seam/tags/JBoss_Seam_2_1_0_B1 
-          -m "removing old tag prior to applying updated tag"
- - Recopy back to tag
-    -"svn copy https://svn.jboss.org/repos/seam/XX/XX 
-      https://svn.jboss.org/repos/seam/tags/JBoss_Seam_x_x_x_XXX 
-      -m "create JBoss_Seam_x_x_x_XXX tag""
-    - ex. svn copy https://svn.jboss.org/repos/seam/trunk 
-          https://svn.jboss.org/repos/seam/tags/JBoss_Seam_2_1_0_B1 
-          -m "Updated tag for 2.1.0.B1"
+    - git tag -d JBoss_Seam_x_x_x_XXX
+ - Recreate the tag
+    - git tag JBoss_Seam_x_x_x_XXX 
 
 [FUTURE]
 --------
