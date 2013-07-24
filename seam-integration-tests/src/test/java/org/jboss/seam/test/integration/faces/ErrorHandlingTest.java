@@ -17,6 +17,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.test.integration.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,8 +43,9 @@ public class ErrorHandlingTest
    public static Archive<?> createDeployment()
    {
       // This is a client test, use a real (non-mocked) Seam deployment
-      return Deployments.realSeamDeployment()
-            .addClasses(TestComponent.class, TestException.class)
+      WebArchive war = Deployments.realSeamDeployment();
+      war.delete("WEB-INF/pages.xml");
+      war.addClasses(TestComponent.class, TestException.class)
             .addAsWebResource(new StringAsset(
                   "<html xmlns=\"http://www.w3.org/1999/xhtml\"" +
                   " xmlns:h=\"http://java.sun.com/jsf/html\"" +
@@ -74,10 +76,12 @@ public class ErrorHandlingTest
                   "<pages xmlns=\"http://jboss.org/schema/seam/pages\"" +
                   " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
                   " xsi:schemaLocation=\"http://jboss.org/schema/seam/pages http://jboss.org/schema/seam/pages-2.3.xsd\">\n" +
-                  "<exception class=\"org.jboss.seam.test.integration.faces.ErrorHandlingTest.TestException\">" + 
+                  "<exception class=\"org.jboss.seam.test.integration.faces.ErrorHandlingTest$TestException\">" + 
                    "<redirect view-id=\"/error.xhtml\">"+
                    "</redirect>"+
-                   "</exception>"), "pages.xml");
+                   "</exception></pages>"), "pages.xml");
+
+        return war;
    }
    
    public static class TestException extends Exception
