@@ -1,14 +1,13 @@
 package org.jboss.seam.example.quartz.test;
 
+import java.io.File;
+
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
-
-import java.io.File;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 public class Deployments {
     public static EnterpriseArchive quartzDeployment() {
@@ -28,10 +27,8 @@ public class Deployments {
         JavaArchive ejb =  ear.getAsType(JavaArchive.class, "quartz-ejb.jar");
         ejb.addClasses(TestPaymentController.class, TestPaymentProcessor.class, TransactionStatus.class);
         
-        ear.addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class)
-              .configureFrom("pom.xml")
-              .artifact("org.dbunit:dbunit:jar:2.2")
-              .resolveAsFiles());
+        ear.addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml")
+        		.resolve("org.dbunit:dbunit:jar:2.2").withTransitivity().asFile());
 
         return ear;
     }

@@ -11,9 +11,6 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.seam.example.booking.Booking;
 
-import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
-
 public class Deployments {
 	public static EnterpriseArchive bookingDeployment() {
 		return ShrinkWrap.create(ZipImporter.class, "seam-metawidget-booking.ear").importFrom(new File("../booking-ear/target/seam-metawidget-booking.ear"))
