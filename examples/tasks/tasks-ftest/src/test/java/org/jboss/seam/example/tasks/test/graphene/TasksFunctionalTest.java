@@ -25,6 +25,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import static org.jboss.arquillian.graphene.Graphene.*;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.seam.example.common.test.DeploymentResolver;
 import org.jboss.seam.example.common.test.SeamGrapheneTest;
 import org.jboss.shrinkwrap.api.Archive;
@@ -95,6 +96,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(1)
     public void resolveTuringTask() {
         String turing = "Build the Turing machine";
         resolveTask(turing);
@@ -108,6 +110,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(2)
     public void deleteMilkTask() {
         String milk = "Buy milk";
         deleteTask(milk);
@@ -121,6 +124,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(3)
     public void undoTurtleTask() {
         String turtle = "Buy a turtle";
         click(getBy(RESOLVED_LINK));
@@ -139,6 +143,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(4)
     public void editTurtleTask() {
         String turtle = "Buy a turtle";
         String newCategory = "Work";
@@ -149,6 +154,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(5)
     public void createQACategory() {
         String category = "JBoss QA";
         click(getBy(CATEGORIES_LINK));
@@ -161,6 +167,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(6)
     public void createSeleniumTask() {
         String description = "Create selenium ftests for all available examples";
         newTask("Work", description);
@@ -169,6 +176,7 @@ public class TasksFunctionalTest extends SeamGrapheneTest {
     }
 
     @Test
+    @InSequence(7)
     public void deleteSchoolCategory() {
         String category = "School";
         click(getBy(CATEGORIES_LINK));
