@@ -49,7 +49,7 @@ public class UIField extends FormComponent
             String[] stringValue = (String[]) theValue;
             if (stringValue.length > 0)
             {
-               success = fields.setField(theName, stringValue[0]);
+               success = fields.setListSelection(theName, stringValue);
             }
             else
             {

@@ -918,7 +918,7 @@
 			<dependency>
 				<groupId>com.lowagie</groupId>
 				<artifactId>itext</artifactId>
-				<version>2.1.2</version>
+				<version>2.1.7</version>
 				<exclusions>
 					<exclusion>
 						<groupId>junit</groupId>
@@ -939,7 +939,7 @@
 			<dependency>
 				<groupId>com.lowagie</groupId>
 				<artifactId>itext-rtf</artifactId>
-				<version>2.1.2</version>
+				<version>2.1.7</version>
 				<exclusions>
 					<exclusion>
 						<groupId>junit</groupId>
