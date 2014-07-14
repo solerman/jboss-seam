@@ -110,7 +110,7 @@ public class EditArtistTest extends DBJUnitSeamTest
             @Override
             protected void renderResponse() throws Exception 
             {
-                assert ARTIST_NEW_DESCRIPTION.equals(getValue("#{artist.description"));
+                assert ARTIST_NEW_DESCRIPTION.equals(getValue("#{artist.description}"));
                 assert isLongRunningConversation();
             }
             

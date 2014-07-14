@@ -108,7 +108,7 @@ public class EditDiscTest extends DBJUnitSeamTest{
             @Override
             protected void renderResponse() throws Exception 
             {
-                assert DISC4_NEW_DESCRIPTION.equals(getValue("#{disc.description"));
+                assert DISC4_NEW_DESCRIPTION.equals(getValue("#{disc.description}"));
                 assert DISC4_ARTIST.equals(getValue("#{disc.artist.name}"));
                 assert isLongRunningConversation();
             }
