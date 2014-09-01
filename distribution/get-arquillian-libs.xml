@@ -7,14 +7,14 @@
 
     <property name="test.lib.dir" location="test" />
     <property name="version.jboss-as7" value="7.2.0.Final" />
-    <property name="version.arquillian-junit" value="1.1.0.Final" />
+    <property name="version.arquillian-junit" value="1.1.4.Final" />
     <target name="copyarq">
         <mkdir dir="${test.lib.dir}" />
         <aether:resolve>
             <aether:dependencies>
                 <aether:dependency groupid="org.jboss.shrinkwrap.resolver"
                     artifactid="shrinkwrap-resolver-depchain" type="pom"
-                    version="2.0.0" />
+                    version="2.1.1" />
                 <aether:dependency groupid="org.jboss.shrinkwrap"
                     artifactid="shrinkwrap-api" type="pom" version="1.1.2" />
                 <aether:dependency groupid="org.jboss.as"

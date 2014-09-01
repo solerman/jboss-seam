@@ -56,11 +56,11 @@
         <version.org.testng>5.14.10</version.org.testng>
         
         <!-- Versions of Arquillian and Shrinkwrap -->
-        <version.org.jboss.arquillian>1.1.0.Final</version.org.jboss.arquillian>
+        <version.org.jboss.arquillian>1.1.4.Final</version.org.jboss.arquillian>
         <version.org.jboss.arquillian.extension.drone>1.2.3.Final</version.org.jboss.arquillian.extension.drone>
-        <version.org.jboss.arquillian.graphene>2.0.0.Final</version.org.jboss.arquillian.graphene>
+        <version.org.jboss.arquillian.graphene>2.0.3.Final</version.org.jboss.arquillian.graphene>
         <version.org.jboss.as.arquillian.container>7.2.0.Final</version.org.jboss.as.arquillian.container>
-        <version.org.jboss.shrinkwrap.resolver>2.0.2</version.org.jboss.shrinkwrap.resolver>
+        <version.org.jboss.shrinkwrap.resolver>2.1.1</version.org.jboss.shrinkwrap.resolver>
             
 		<!-- ***************** -->
 		<!-- Repository Deployment URLs -->
